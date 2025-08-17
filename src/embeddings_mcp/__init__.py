@@ -55,4 +55,4 @@ def get_embeddings_batch(texts: List[str], model: str = "nomic-embed-text") -> L
 
 def main() -> None:
     """Run the MCP server."""
-    asyncio.run(mcp.run())
+    mcp.run()
