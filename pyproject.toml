@@ -1,0 +1,22 @@
+[project]
+name = "embeddings-mcp"
+version = "0.1.0"
+description = "MCP server for generating text embeddings using Ollama"
+readme = "README.md"
+authors = [
+    { name = "William Lyon", email = "lyonwj@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.13.0",
+    "ollama>=0.5.3",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+]
+
+[project.scripts]
+embeddings-mcp = "embeddings_mcp:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
