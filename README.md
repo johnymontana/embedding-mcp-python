@@ -81,6 +81,25 @@ echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVe
 
 The server should respond with proper MCP protocol messages and list the available tools.
 
+### Running Over HTTP
+
+The server also supports HTTP transport mode for integration with web-based MCP clients:
+
+```bash
+# Start HTTP server on default port 8000
+uv run embeddings-mcp --transport http
+
+# Start HTTP server on custom host and port
+uv run embeddings-mcp --transport http --host 0.0.0.0 --port 9000
+
+# View available options
+uv run embeddings-mcp --help
+```
+
+**HTTP Endpoint**: The MCP server is available at `/mcp` endpoint.
+
+**Note**: HTTP mode requires clients to accept both `application/json` and `text/event-stream` content types.
+
 ## Available Tools
 
 ### `get_embedding`
@@ -123,6 +142,19 @@ Add the following to your Claude Desktop configuration file:
 ```
 
 **Note**: Replace the `cwd` path with the actual path to your embeddings-mcp directory.
+
+**For HTTP transport** (if your client supports it):
+```json
+{
+  "mcpServers": {
+    "embeddings": {
+      "command": "uv",
+      "args": ["run", "embeddings-mcp", "--transport", "http", "--port", "8000"],
+      "cwd": "/Users/lyonwj/github/johnymontana/embeddings-mcp"
+    }
+  }
+}
+```
 
 ### Cursor
 
@@ -223,6 +255,10 @@ npx @modelcontextprotocol/inspector
 #    - get_embeddings_batch
 
 **Note**: Replace the working directory path with the actual path to your embeddings-mcp directory.
+
+**For HTTP testing**, you can also use the MCP Inspector with HTTP transport:
+# 1. Start the server: uv run embeddings-mcp --transport http --port 8000
+# 2. In the inspector, use HTTP transport mode and connect to http://127.0.0.1:8001/mcp
 ```
 
 The inspector provides a web interface where you can:

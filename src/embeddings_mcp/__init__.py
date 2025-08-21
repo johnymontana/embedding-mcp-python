@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import argparse
 from typing import Any, List
 
 import ollama
@@ -55,4 +56,32 @@ def get_embeddings_batch(texts: List[str], model: str = "nomic-embed-text") -> L
 
 def main() -> None:
     """Run the MCP server."""
-    mcp.run()
+    parser = argparse.ArgumentParser(description="Embeddings MCP Server")
+    parser.add_argument(
+        "--transport", 
+        choices=["stdio", "http"], 
+        default="stdio",
+        help="Transport mode: stdio (default) or http"
+    )
+    parser.add_argument(
+        "--host", 
+        default="127.0.0.1",
+        help="Host for HTTP server (default: 127.0.0.1)"
+    )
+    parser.add_argument(
+        "--port", 
+        type=int, 
+        default=8000,
+        help="Port for HTTP server (default: 8000)"
+    )
+    
+    args = parser.parse_args()
+    
+    if args.transport == "http":
+        logger.info(f"Starting HTTP server on {args.host}:{args.port}")
+        import uvicorn
+        app = mcp.streamable_http_app()
+        uvicorn.run(app, host=args.host, port=args.port)
+    else:
+        logger.info("Starting stdio server")
+        mcp.run()
